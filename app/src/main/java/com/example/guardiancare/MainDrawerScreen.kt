@@ -4,10 +4,13 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +39,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.guardiancare.navigation.DrawerItem
 import com.example.guardiancare.navigation.Routes
+import com.example.guardiancare.ui.screens.CaretakerScreen
+import com.example.guardiancare.ui.screens.ChatbotScreen
+import com.example.guardiancare.ui.screens.ElderlyScreen
 import com.example.guardiancare.ui.screens.FallDetectionScreen
+import com.example.guardiancare.ui.screens.HelpSreen
 import com.example.guardiancare.ui.screens.HomeScreen
 import com.example.guardiancare.ui.screens.ProfileScreen
 import com.example.guardiancare.ui.screens.SettingsScreen
@@ -66,20 +73,24 @@ fun MainDrawerScreen() {
 
     val navItems = if (userRole == "Member") {
         listOf(
-            DrawerItem("home", "Home", Icons.Default.Home),
-            DrawerItem("profile", "Profile", Icons.Default.Person),
-            DrawerItem("settings", "Settings", Icons.Default.Settings),
-            DrawerItem("fall_detection", "Fall Detection", Icons.Default.Warning),
-            // Add more for members
+            DrawerItem(Routes.Home, "Home", Icons.Filled.Home),
+            DrawerItem(Routes.Profile, "Profile", Icons.Filled.AccountCircle),
+            DrawerItem(Routes.Elderly, "Eldery", Icons.Filled.Person),
+            DrawerItem(Routes.FallDetection, "Fall Notifications", Icons.Filled.Warning),
+            DrawerItem(Routes.Chatbot, "Chatbot AI", Icons.Filled.Star),
+            DrawerItem(Routes.Help, "Help", Icons.Filled.Info),
+            DrawerItem(Routes.Settings, "Settings", Icons.Filled.Settings),
         )
     } else {
         // Elderly
         listOf(
-            DrawerItem("home", "Home", Icons.Default.Home),
-            DrawerItem("profile", "Profile", Icons.Default.Person),
-            DrawerItem("settings", "Settings", Icons.Default.Settings),
-            DrawerItem("fall_detection", "Fall Detection", Icons.Default.Warning),
-            // Add more for elderly
+            DrawerItem(Routes.Home, "Home", Icons.Filled.Home),
+            DrawerItem(Routes.Profile, "Profile", Icons.Filled.AccountCircle),
+            DrawerItem(Routes.Caretaker, "Caretaker", Icons.Filled.Person),
+            DrawerItem(Routes.Chatbot, "Chatbot AI", Icons.Filled.Star),
+            DrawerItem(Routes.Help, "Help", Icons.Filled.Info),
+            DrawerItem(Routes.Settings, "Settings", Icons.Filled.Settings),
+            DrawerItem(Routes.FallDetection, "Fall Detection Test", Icons.Filled.Warning),
         )
     }
 
@@ -127,7 +138,6 @@ fun MainDrawerScreen() {
                 )
             }
         ) { innerPadding ->
-            // The CHILD NavHost: “home”, “profile”, “settings”
             NavHost(
                 navController = childNavController,
                 startDestination = "home",
@@ -135,6 +145,10 @@ fun MainDrawerScreen() {
             ) {
                 composable("home") { HomeScreen() }
                 composable("profile") { ProfileScreen() }
+                composable("caretaker") { CaretakerScreen() }
+                composable("elderly") { ElderlyScreen() }
+                composable("chatbot") { ChatbotScreen() }
+                composable("help") { HelpSreen() }
                 composable("settings") { SettingsScreen() }
                 composable(Routes.FallDetection) {
                     FallDetectionScreen(

@@ -5,5 +5,8 @@ object Routes {
     const val Profile = "profile"
     const val Settings = "settings"
     const val FallDetection = "fall_detection"
-    // Add more (like "caretaker", "chatbot", etc.) as needed
+    const val Caretaker = "caretaker"
+    const val Chatbot = "chatbot"
+    const val Help = "help"
+    const val Elderly = "elderly"
 }
