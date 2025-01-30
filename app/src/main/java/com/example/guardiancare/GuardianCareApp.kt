@@ -7,103 +7,97 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
-import com.example.guardiancare.navigation.NavDrawerItems
-import com.example.guardiancare.navigation.NavGraph
-import androidx.compose.material3.NavigationDrawerItemDefaults
-import kotlinx.coroutines.launch
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.rememberDrawerState
-
-
-import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.guardiancare.navigation.NavDrawerItems
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GuardianCareApp() {
     val navController = rememberNavController()
 
-    // Simple NavHost with two routes
+    // Single NavHost: "login" → "drawerHome"
     NavHost(
         navController = navController,
         startDestination = "login"
     ) {
-        // Route #1: Login Screen
+        // 1) Login route
         composable("login") {
+            // We'll pass a callback so the "Login" button triggers
+            // navController.navigate("drawerHome")
             LoginScreen(
                 onLoginClick = {
-                    // Hardcode navigation to drawer page
                     navController.navigate("drawerHome")
                 }
             )
         }
-        // Route #2: Drawer Page
+
+        // 2) Drawer route (role-based)
         composable("drawerHome") {
-            DrawerPage()
+            // This is where we inline your original commented-out code:
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            val scope = rememberCoroutineScope()
+
+            // Hardcode userRole or retrieve from saved data
+            val userRole = "Elderly" // or "Member"
+
+            // Dynamically load the NavDrawer items
+            val navItems = NavDrawerItems.getItemsForRole(userRole)
+            var selectedRoute by remember { mutableStateOf(navItems.firstOrNull()?.route ?: "") }
+
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    ModalDrawerSheet {
+                        Text(
+                            text = "Guardian Care Drawer",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(16.dp)
+                        )
+
+                        // Build each drawer item
+                        navItems.forEach { item ->
+                            NavigationDrawerItem(
+                                icon = { Icon(item.icon, contentDescription = item.label) },
+                                label = { Text(item.label) },
+                                selected = (selectedRoute == item.route),
+                                onClick = {
+                                    selectedRoute = item.route
+                                    // We'll not set a sub-nav for these items,
+                                    // but you could do something custom here (e.g., show a screen).
+                                    // Just remove or comment out any second navHost calls.
+
+                                    scope.launch { drawerState.close() }
+                                },
+                                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                            )
+                        }
+                    }
+                }
+            ) {
+                // Your main screen (Scaffold + TopAppBar)
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text("Guardian Care") },
+                            navigationIcon = {
+                                IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                                    Icon(Icons.Filled.Menu, contentDescription = "Open Drawer")
+                                }
+                            }
+                        )
+                    }
+                ) { paddingValues ->
+                    // If you want a single page or content area
+                    // We'll just show a placeholder:
+                    Text(
+                        text = "Welcome to the Drawer!",
+                        modifier = Modifier.padding(paddingValues).padding(16.dp)
+                    )
+                }
+            }
         }
     }
-
-//    val navController = rememberNavController()
-//    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-//    val scope = rememberCoroutineScope()
-//
-//    // Example: Hardcode user role. You can replace this with real logic from login, etc.
-//    val userRole = "Elderly" // or "Member"
-//
-//    // Dynamically load drawer items based on role
-//    val navItems = NavDrawerItems.getItemsForRole(userRole)
-//    var selectedRoute by remember { mutableStateOf(navItems.firstOrNull()?.route ?: "") }
-//
-//    ModalNavigationDrawer(
-//        drawerState = drawerState,
-//        drawerContent = {
-//            ModalDrawerSheet {
-//                Text(
-//                    text = "Guardian Care Drawer",
-//                    style = MaterialTheme.typography.titleMedium,
-//                    modifier = Modifier.padding(16.dp)
-//                )
-//
-//                // Drawer items
-//                navItems.forEach { item ->
-//                    NavigationDrawerItem(
-//                        icon = { Icon(item.icon, contentDescription = item.label) },
-//                        label = { Text(item.label) },
-//                        selected = (selectedRoute == item.route),
-//                        onClick = {
-//                            selectedRoute = item.route
-//                            navController.navigate(item.route) {
-//                                popUpTo(navController.graph.startDestinationId) { saveState = true }
-//                                launchSingleTop = true
-//                                restoreState = true
-//                            }
-//                            scope.launch { drawerState.close() }
-//                        },
-//                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-//                    )
-//                }
-//            }
-//        }
-//    ) {
-//        // Main screen scaffold
-//        Scaffold(
-//            topBar = {
-//                TopAppBar(
-//                    title = { Text("Guardian Care") },
-//                    navigationIcon = {
-//                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
-//                            Icon(Icons.Filled.Menu, contentDescription = "Open Drawer")
-//                        }
-//                    }
-//                )
-//            }
-//        ) { paddingValues ->
-//            NavGraph(
-//                navController = navController,
-//                modifier = Modifier.padding(paddingValues)
-//            )
-//        }
-//    }
 }

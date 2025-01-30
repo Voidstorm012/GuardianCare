@@ -33,11 +33,9 @@ import com.example.guardiancare.design_system.MyTextField
 
 @Composable
 fun LoginScreen(
-    // We add a callback to navigate to the drawer page
-    onLoginClick: () -> Unit,
+    onLoginClick: () -> Unit, // we add a callback for the button
     modifier: Modifier = Modifier
 ) {
-    // Keep track of email/password in state
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -90,10 +88,9 @@ fun LoginScreen(
         )
 
         Button(
-            // Hardcode the onClick to navigate
             onClick = {
-                // Typically you'd do: check credentials...
-                // But we'll skip that and jump straight to the drawer screen
+                // Hardcode login logic → skip checks
+                // Then navigate
                 onLoginClick()
             },
             modifier = Modifier.fillMaxWidth()
@@ -140,7 +137,7 @@ fun LoginScreen(
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    // TODO: Navigate to Register if you want
+                    // TODO: register page or navigate
                 }
             )
         }
