@@ -33,7 +33,7 @@ import com.example.guardiancare.design_system.MyTextField
 
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit, // we add a callback for the button
+    onLoginClick: () -> Unit, // callback to navigate to main
     modifier: Modifier = Modifier
 ) {
     var email by remember { mutableStateOf("") }
@@ -47,6 +47,7 @@ fun LoginScreen(
     ) {
         // Top area: Image + Title
         Column {
+            // R.drawable.login -> ensure you have this drawable
             Image(
                 painter = painterResource(R.drawable.login),
                 contentDescription = null,
@@ -89,17 +90,12 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                // Hardcode login logic → skip checks
-                // Then navigate
+                // Hardcode login checks if needed
                 onLoginClick()
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "Login",
-                fontSize = 17.sp,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
+            Text("Login", fontSize = 17.sp, modifier = Modifier.padding(vertical = 8.dp))
         }
 
         // "Or, login with..."
@@ -125,19 +121,14 @@ fun LoginScreen(
         }
 
         // Register link
-        Row(
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(
-                text = "Don't have an account? ",
-                fontSize = 16.sp,
-            )
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Text("Don't have an account? ", fontSize = 16.sp)
             Text(
                 text = "Register",
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    // TODO: register page or navigate
+                    // TODO: navigate to register
                 }
             )
         }
