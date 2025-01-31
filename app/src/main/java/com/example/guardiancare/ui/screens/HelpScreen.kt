@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SettingsScreen() {
+fun HelpSreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -19,6 +19,6 @@ fun SettingsScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Settings Screen")
+        Text("Help Screen")
     }
 }
