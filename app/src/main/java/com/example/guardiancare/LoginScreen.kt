@@ -38,6 +38,7 @@ import com.example.guardiancare.design_system.MyTextField
 @Composable
 fun LoginScreen(
     onLoginClick: () -> Unit, // callback to navigate to main
+    onRegisterClick: () -> Unit, // callback to navigate to Register screen
     modifier: Modifier = Modifier
 ) {
     var email by remember { mutableStateOf("") }
@@ -132,7 +133,7 @@ fun LoginScreen(
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-
+                    onRegisterClick()
                 }
             )
         }

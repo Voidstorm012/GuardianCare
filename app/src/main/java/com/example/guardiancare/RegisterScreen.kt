@@ -1,75 +1,53 @@
-package com.example.guardiancare
-
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.guardiancare.design_system.MyTextField
+import com.example.guardiancare.BackEnd.AuthService
+import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterScreen(
-    modifier: Modifier = Modifier
-) {
+fun RegisterScreen(modifier: Modifier = Modifier) {
     var email by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var role by remember { mutableStateOf("elderly") }
+    var message by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp),
+            .padding(20.dp),
         verticalArrangement = Arrangement.SpaceAround
     ) {
-        // Top area: Image + Title
-        Column {
-            Image(
-                painter = painterResource(R.drawable.register),
-                contentDescription = null,
-                contentScale = ContentScale.FillHeight,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxWidth(0.25f)
-            )
+        TextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
+        TextField(value = name, onValueChange = { name = it }, label = { Text("Full Name") })
+        TextField(value = password, onValueChange = { password = it }, label = { Text("Password") })
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Register",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 30.sp
-            )
+        Row {
+            RadioButton(selected = role == "elderly", onClick = { role = "elderly" })
+            Text("Elderly")
+            Spacer(modifier = Modifier.width(16.dp))
+            RadioButton(selected = role == "member", onClick = { role = "member" })
+            Text("Member")
         }
 
-        // Email input
-        MyTextField(
-            value = email,
-            onValueChange = { email = it },
-            hint = "Email",
-            leadingIcon = Icons.Outlined.Email,
-            trailingIcon = Icons.Outlined.Check,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier.fillMaxWidth()
-        )
+        Button(onClick = {
+            coroutineScope.launch {
+                try {
+                    val response = AuthService.register(name, email, password, role)
+                    message = response ?: "Registration Failed"
+                } catch (e: Exception) {
+                    message = "Error: ${e.localizedMessage}"  // Properly display error messages
+                }
+            }
+        }) {
+            Text("Register")
+        }
+
+        if (message.isNotEmpty()) {
+            Text(text = message, color = androidx.compose.ui.graphics.Color.Red)
+        }
     }
 }

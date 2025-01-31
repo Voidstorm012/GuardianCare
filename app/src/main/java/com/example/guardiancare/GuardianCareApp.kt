@@ -1,5 +1,6 @@
 package com.example.guardiancare
 
+import RegisterScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,11 +26,16 @@ fun GuardianCareApp() {
                 onLoginClick = {
                     navController.navigate("drawerHome") // ✅ Loads `MainDrawerScreen.kt`
                 },
-//                onRegisterClick = {
-//                    navController.navigate(Routes.Registration)
-//                }
+                onRegisterClick = {
+                    navController.navigate("registration") //
+                }
+
+
             )
         }
+        composable("registration") {
+            RegisterScreen()
+    }
 
         // Main Drawer Screen (App Main UI)
         composable("drawerHome") {
