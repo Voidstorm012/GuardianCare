@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen() {
+fun ChatbotScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -19,6 +19,6 @@ fun HomeScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Home Screen")
+        Text("Chatbot Screen")
     }
 }
