@@ -19,6 +19,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.guardiancare.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,12 +37,19 @@ fun GuardianCareApp() {
                 onLoginClick = {
                     // Hardcode navigation to drawer page
                     navController.navigate("drawerHome")
+                },
+                onRegisterClick = {
+                    navController.navigate(Routes.Registration)
                 }
             )
         }
         // Route #2: Drawer Page
         composable("drawerHome") {
             DrawerPage()
+        }
+        // Route #3: Registration Screen
+        composable(Routes.Registration) {
+            RegisterScreen()
         }
     }
 

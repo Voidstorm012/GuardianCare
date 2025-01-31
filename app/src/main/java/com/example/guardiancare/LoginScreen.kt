@@ -35,6 +35,7 @@ import com.example.guardiancare.design_system.MyTextField
 fun LoginScreen(
     // We add a callback to navigate to the drawer page
     onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit, // callback for register button to go to register page
     modifier: Modifier = Modifier
 ) {
     // Keep track of email/password in state
@@ -140,7 +141,7 @@ fun LoginScreen(
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    // TODO: Navigate to Register if you want
+                    onRegisterClick()
                 }
             )
         }
